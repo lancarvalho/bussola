@@ -1,0 +1,26 @@
+{
+  "name": "Bússola Política",
+  "short_name": "Bússola",
+  "description": "Um quiz interativo para ajudar os usuários a mapear suas posições políticas no espectro ideológico brasileiro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
