@@ -1,6 +1,8 @@
+
 {
   "name": "Bússola Política",
   "short_name": "Bússola",
+  "id": "/",
   "description": "Descubra sua posição no espectro político brasileiro com este quiz interativo e moderno.",
   "categories": ["education", "politics", "social"],
   "start_url": "/",
