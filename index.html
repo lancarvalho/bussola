@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bússola Política</title>
+    <title>Bússola Política | Descubra seu Espectro</title>
 
-    <!-- PWA Meta Tags -->
+    <!-- PWA Meta Tags & Favicons -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
-    <link rel="apple-touch-icon" href="/logo-192.png" />
-    <link rel="icon" href="/logo.svg" />
+    
+    <!-- Usando SVG como favicon moderno (Navegadores e PWA preferem SVG) -->
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="/logo.svg" />
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Descubra onde você se encaixa no espectro ideológico brasileiro com este quiz interativo." />
+    <meta name="description" content="Faça o teste da Bússola Política e descubra onde você se encaixa no espectro ideológico brasileiro. Quiz interativo sobre economia, sociedade e política." />
+    <meta name="keywords" content="política, bússola política, quiz, teste político, esquerda, direita, brasil" />
+    <meta name="author" content="Espectro Político" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <!-- Redes sociais EXIGEM PNG/JPG. Usando URL absoluta hospedada para garantir preview. -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="/" />
-    <meta property="og:title" content="Bússola Política" />
-    <meta property="og:description" content="Descubra onde você se encaixa no espectro ideológico brasileiro com este quiz interativo." />
-    <meta property="og:image" content="/logo-512.png" />
+    <meta property="og:url" content="https://bussola-politica.app/" />
+    <meta property="og:title" content="Bússola Política - Descubra seu lado" />
+    <meta property="og:description" content="Onde você realmente está no espectro político brasileiro? Faça o teste agora." />
+    <meta property="og:image" content="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@pautaja" />
+    <meta name="twitter:creator" content="@pautaja" />
     <meta property="twitter:url" content="/" />
     <meta name="twitter:title" content="Bússola Política" />
-    <meta name="twitter:description" content="Descubra onde você se encaixa no espectro ideológico brasileiro com este quiz interativo." />
-    <meta name="twitter:image" content="/logo-512.png" />
+    <meta name="twitter:description" content="Onde você realmente está no espectro político brasileiro? Faça o teste agora." />
+    <meta name="twitter:image" content="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
 
     <script src="https://cdn.tailwindcss.com"></script>
 <script type="importmap">
@@ -39,7 +49,7 @@
 }
 </script>
 </head>
-<body class="bg-slate-900 text-slate-300">
+<body class="bg-slate-900 text-slate-300 selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
     <script>

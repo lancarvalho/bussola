@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface AboutModalProps {
@@ -5,6 +6,8 @@ interface AboutModalProps {
 }
 
 const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
+    const currentYear = new Date().getFullYear();
+
     return (
         <div 
             className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 backdrop-blur-sm"
@@ -38,6 +41,13 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
                     <section>
                         <h3 className="font-semibold text-slate-300 mb-1">Privacidade</h3>
                         <p>Sua privacidade é fundamental. Este aplicativo não solicita, coleta ou armazena quaisquer dados pessoais ou respostas do quiz. Toda a interação acontece diretamente no seu navegador e é completamente anônima.</p>
+                    </section>
+
+                    <hr className="border-slate-700 my-4" />
+                    
+                    <section className="text-center text-xs text-slate-500 pt-2">
+                        <p className="font-semibold">&copy; {currentYear} Espectro Político</p>
+                        <p>Feito com tecnologia IA by AI Studio.</p>
                     </section>
                 </div>
 

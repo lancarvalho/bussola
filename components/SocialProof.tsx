@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 const cities = ['de Porto Alegre, RS', 'de São Paulo, SP', 'do Rio de Janeiro, RJ', 'de Belo Horizonte, MG', 'de Salvador, BA', 'de Brasília, DF', 'de Curitiba, PR'];
@@ -44,11 +45,16 @@ const SocialProof: React.FC = () => {
                 </div>
             </div>
             
-            {/* Toast Notification */}
+            {/* Toast Notification - Moved to top right to avoid footer clash */}
             <div 
-                className={`fixed bottom-5 left-5 bg-slate-800 border border-slate-700 text-slate-300 text-sm py-2 px-4 rounded-lg shadow-lg transition-all duration-500 ${showToast ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+                className={`fixed top-24 right-4 max-w-xs bg-slate-800 border border-slate-700 text-slate-300 text-sm py-3 px-4 rounded-lg shadow-xl z-50 transition-all duration-500 ${showToast ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}
             >
-                Alguém {lastShare} acabou de compartilhar seu resultado!
+                <div className="flex items-center gap-3">
+                    <div className="bg-green-500/20 p-2 rounded-full">
+                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                    </div>
+                    <span>Alguém {lastShare} acabou de compartilhar seu resultado!</span>
+                </div>
             </div>
         </>
     );

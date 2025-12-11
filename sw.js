@@ -1,17 +1,20 @@
-const CACHE_NAME = 'bussola-politica-cache-v1';
+
+const CACHE_NAME = 'bussola-politica-cache-v3';
 // Arquivos iniciais para o cache do app shell
 const urlsToCache = [
   '/',
   '/index.html',
   '/logo.svg',
-  '/logo-192.png',
-  '/logo-512.png',
+  '/logo.png', // Importante para compartilhar mesmo offline se possível
   '/qr-code.png',
   '/manifest.json',
 ];
 
 // Instala o service worker e armazena o app shell em cache
 self.addEventListener('install', event => {
+  // Força o SW a se tornar ativo imediatamente após a instalação
+  self.skipWaiting();
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -36,9 +39,6 @@ self.addEventListener('fetch', event => {
             event.request.url.includes('.ts');
 
           if (shouldCache && fetchResponse.status === 200) {
-            // IMPORTANTE: Clona a resposta. Uma resposta é uma stream
-            // e como queremos que o navegador e o cache a consumam,
-            // precisamos cloná-la para ter duas streams.
             const responseToCache = fetchResponse.clone();
             caches.open(CACHE_NAME)
               .then(cache => {
@@ -51,18 +51,22 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Limpa caches antigos
+// Limpa caches antigos e assume controle imediatamente
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // Reivindica o controle de todas as abas abertas imediatamente
+      self.clients.claim(),
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheWhitelist.indexOf(cacheName) === -1) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+    ])
   );
 });

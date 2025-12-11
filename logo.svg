@@ -1,23 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stopColor="#f87171" />
-      <stop offset="20%" stopColor="#fb923c" />
-      <stop offset="40%" stopColor="#facc15" />
-      <stop offset="60%" stopColor="#4ade80" />
-      <stop offset="80%" stopColor="#60a5fa" />
-      <stop offset="100%" stopColor="#818cf8" />
+    <!-- Gradiente do Espectro Político -->
+    <linearGradient id="spectrumGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#ef4444" /> <!-- Vermelho (Esquerda) -->
+      <stop offset="50%" stopColor="#f59e0b" /> <!-- Laranja/Amarelo (Centro) -->
+      <stop offset="100%" stopColor="#3b82f6" /> <!-- Azul (Direita) -->
     </linearGradient>
+    
+    <!-- Sombra suave para profundidade -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="20" />
+      <feOffset dx="0" dy="10" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
-  <path
-    d="M10 100 A 80 80 0 0 1 170 100"
-    stroke="url(#logoGradient)"
-    strokeWidth="20"
-    fill="none"
-    strokeLinecap="round"
-  />
-  <g transform="rotate(25 90 90)">
-    <line x1="90" y1="90" x2="90" y2="20" stroke="white" strokeWidth="8" strokeLinecap="round" />
-    <circle cx="90" cy="90" r="12" fill="white" />
+
+  <!-- Fundo do ícone (Squircle - Estilo App Moderno) -->
+  <rect x="0" y="0" width="1024" height="1024" rx="240" ry="240" fill="#0f172a" />
+
+  <!-- Anel do Espectro -->
+  <circle cx="512" cy="512" r="340" stroke="url(#spectrumGradient)" stroke-width="60" fill="none" stroke-linecap="round" />
+
+  <!-- Marcadores Cardeais -->
+  <path d="M512 132 L512 192 M512 832 L512 892 M132 512 L192 512 M832 512 L892 512" stroke="#334155" stroke-width="30" stroke-linecap="round" />
+
+  <!-- Agulha da Bússola -->
+  <g transform="rotate(45 512 512)" filter="url(#dropShadow)">
+    <!-- Parte Norte (Branca) -->
+    <path d="M512 252 L602 512 L512 512 Z" fill="#f8fafc" />
+    <path d="M512 252 L422 512 L512 512 Z" fill="#cbd5e1" />
+    
+    <!-- Parte Sul (Escura/Vazada ou cor de destaque) -->
+    <path d="M512 772 L602 512 L512 512 Z" fill="#334155" />
+    <path d="M512 772 L422 512 L512 512 Z" fill="#1e293b" />
+    
+    <!-- Pivô Central -->
+    <circle cx="512" cy="512" r="40" fill="#06b6d4" stroke="#0f172a" stroke-width="8"/>
   </g>
 </svg>
