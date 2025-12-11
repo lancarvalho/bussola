@@ -1,22 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 
 interface GaugeProps {
   score: number;
 }
 
 const Gauge: React.FC<GaugeProps> = ({ score }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
   const clampedScore = Math.max(-50, Math.min(50, score));
   // Map score from [-50, 50] to angle [-90, 90] for rotation
   const angle = (clampedScore / 50) * 90;
 
-  // Configuração dos rótulos com posições angulares específicas
+  // Configuração dos rótulos com posições angulares e cores específicas combinando com os segmentos
   const labels = [
-    { value: -50, text: "EXTREMA-ESQUERDA", angle: -90 },
-    { value: -25, text: "ESQUERDA", angle: -45 },
-    { value: 0, text: "CENTRO", angle: 0 },
-    { value: 25, text: "DIREITA", angle: 45 },
-    { value: 50, text: "PURO-SANGUE", angle: 90 },
+    { value: -50, text: "EXTREMA-ESQUERDA", angle: -90, color: "fill-red-900" },
+    { value: -25, text: "ESQUERDA", angle: -45, color: "fill-red-500" },
+    { value: 0, text: "CENTRO", angle: 0, color: "fill-slate-500" },
+    { value: 25, text: "DIREITA", angle: 45, color: "fill-blue-500" },
+    { value: 50, text: "PURO-SANGUE", angle: 90, color: "fill-blue-900" },
   ];
 
   // Definição dos segmentos de cor conforme especificação detalhada
@@ -64,7 +65,8 @@ const Gauge: React.FC<GaugeProps> = ({ score }) => {
 
   return (
     <div className="relative w-full max-w-sm mx-auto flex flex-col items-center">
-      <svg viewBox="0 0 300 185" className="w-full">
+      {/* ViewBox ajustado para acomodar textos externos sem cortes (0 -20 300 190) */}
+      <svg viewBox="0 -20 300 190" className="w-full">
         <defs>
           <clipPath id="cut-off-bottom">
             <rect x="0" y="0" width="300" height="150" />
@@ -80,9 +82,9 @@ const Gauge: React.FC<GaugeProps> = ({ score }) => {
         
         {/* Labels */}
         {labels.map((label) => {
-          // Ajustes de raio para posicionar texto
-          const textRadius = 138; // Um pouco mais afastado para o texto curvo ficar bom
-          const numberRadius = 80; // Raio para os números (dentro do arco)
+          // Ajustes de raio para separar melhor números e texto
+          const textRadius = 142; // Aumentado para afastar do arco
+          const numberRadius = 75; // Reduzido levemente para centralizar na parte interna
           
           return (
             <g key={label.value}>
@@ -92,7 +94,8 @@ const Gauge: React.FC<GaugeProps> = ({ score }) => {
                 y={150 + Math.sin((label.angle - 90) * Math.PI / 180) * textRadius}
                 textAnchor="middle"
                 dominantBaseline="central"
-                className="text-[9px] font-bold fill-slate-500 uppercase tracking-tighter"
+                // Fonte reduzida (text-[8px]) e espaçamento aumentado (tracking-wider) para legibilidade
+                className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-wider ${label.color}`}
                 transform={`rotate(${label.angle}, ${150 + Math.cos((label.angle - 90) * Math.PI / 180) * textRadius}, ${150 + Math.sin((label.angle - 90) * Math.PI / 180) * textRadius})`}
               >
                 {label.text}
@@ -104,7 +107,7 @@ const Gauge: React.FC<GaugeProps> = ({ score }) => {
                  y={150 + Math.sin((label.angle - 90) * Math.PI / 180) * numberRadius}
                  textAnchor="middle"
                  dominantBaseline="central"
-                 className="text-xs font-bold fill-slate-700" // Fonte reduzida (text-base -> text-xs)
+                 className={`text-xs font-bold ${label.color}`}
               >
                 {label.value === 0 ? '0' : label.value > 0 ? `+${label.value}` : label.value}
               </text>
@@ -112,13 +115,32 @@ const Gauge: React.FC<GaugeProps> = ({ score }) => {
           );
         })}
 
-        {/* Center Score */}
-         <text x="150" y="115" textAnchor="middle" className="text-4xl font-bold fill-slate-800">
-            {score >= 0 ? '+' : ''}{Math.round(score)}
-        </text>
+        {/* Center Score with Tooltip Trigger */}
+        <g 
+            onMouseEnter={() => setShowTooltip(true)} 
+            onMouseLeave={() => setShowTooltip(false)}
+            onClick={() => setShowTooltip(!showTooltip)}
+            className="cursor-help"
+        >
+             <text x="150" y="115" textAnchor="middle" className="text-4xl font-bold fill-slate-800 pointer-events-none">
+                {score >= 0 ? '+' : ''}{Math.round(score)}
+            </text>
+            <circle cx="150" cy="115" r="25" fill="transparent" /> {/* Hit area invisible */}
+        </g>
+        
+        {/* Tooltip rendered via foreignObject to handle HTML/Tailwind styling inside SVG coordinates */}
+        <foreignObject x="50" y="125" width="200" height="60" className={`pointer-events-none transition-opacity duration-300 ${showTooltip ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="bg-slate-800 text-slate-200 text-[10px] p-2 rounded shadow-lg text-center border border-slate-600">
+                Pontuação cumulativa.<br/>
+                <span className="text-red-400">-50 (Extrema-Esq)</span> a <span className="text-blue-400">+50 (Extrema-Dir)</span>
+            </div>
+        </foreignObject>
 
         {/* Needle */}
-        <g className="transition-transform duration-1000 ease-out" style={{ transform: `rotate(${angle}deg)`, transformOrigin: '150px 150px' }}>
+        <g 
+            className="transition-transform duration-700 ease-out will-change-transform" 
+            style={{ transform: `rotate(${angle}deg)`, transformOrigin: '150px 150px' }}
+        >
             <circle cx="150" cy="150" r="8" fill="white" strokeWidth="3" className="stroke-slate-900" />
             <line x1="150" y1="150" x2="150" y2="40" className="stroke-slate-900" strokeWidth="2" />
         </g>
