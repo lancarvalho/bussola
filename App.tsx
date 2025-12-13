@@ -70,7 +70,7 @@ const App: React.FC = () => {
                         <SocialProof />
                         <button
                             onClick={startQuiz}
-                            className="bg-gradient-to-r from-teal-400 to-cyan-500 text-white font-bold py-3 px-8 rounded-full hover:opacity-90 shadow-lg shadow-teal-500/20 transition-all duration-300 text-lg mt-8"
+                            className="bg-gradient-to-r from-teal-400 to-cyan-500 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-teal-500/20 transition-all duration-300 text-lg mt-8 hover:opacity-90 hover:scale-105 active:scale-95"
                         >
                             Começar o Quiz
                         </button>

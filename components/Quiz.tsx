@@ -12,6 +12,12 @@ interface QuizProps {
 const Quiz: React.FC<QuizProps> = ({ question, questionNumber, totalQuestions, onAnswer }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation on mount
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     setSelectedAnswer(null);
@@ -31,7 +37,10 @@ const Quiz: React.FC<QuizProps> = ({ question, questionNumber, totalQuestions, o
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 transform transition-all duration-500">
+      <div 
+        className={`w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 sm:p-8 transform transition-all duration-700 ease-out 
+          ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+      >
         <div className="mb-6">
           <p className="text-sm font-semibold text-slate-500 mb-2">
             Pergunta {questionNumber} de {totalQuestions}
@@ -53,13 +62,21 @@ const Quiz: React.FC<QuizProps> = ({ question, questionNumber, totalQuestions, o
               key={index}
               onClick={() => handleSelectAnswer(answer.score, index)}
               disabled={isAnswered}
-              className={`w-full text-left p-4 border rounded-lg transition-all duration-300 text-slate-700
+              className={`w-full text-left p-4 border rounded-lg transition-all duration-300 group
                 ${isAnswered && selectedAnswer !== index ? 'bg-slate-100 border-slate-200 text-slate-500' : ''}
-                ${selectedAnswer === index ? 'bg-slate-800 text-white border-slate-800 scale-105 shadow-lg' : 'bg-white border-slate-300 hover:bg-slate-50 hover:border-slate-400'}
+                ${selectedAnswer === index ? 'bg-slate-800 text-white border-slate-800 scale-105 shadow-lg' : ''}
+                ${!isAnswered && selectedAnswer !== index ? 'bg-white border-slate-300 text-slate-700 hover:bg-slate-700 hover:border-slate-500 hover:text-white' : ''}
                 ${isAnswered ? 'cursor-not-allowed' : 'cursor-pointer'}
               `}
             >
-              {answer.text}
+              <div className="flex justify-between items-center w-full">
+                <span>{answer.text}</span>
+                {isAnswered && selectedAnswer === index && (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-emerald-400 ml-2 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
             </button>
           ))}
         </div>
