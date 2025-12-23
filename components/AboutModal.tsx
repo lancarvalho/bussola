@@ -46,8 +46,8 @@ const AboutModal: React.FC<AboutModalProps> = ({ onClose }) => {
                     <hr className="border-slate-700 my-4" />
                     
                     <section className="text-center text-xs text-slate-500 pt-2">
-                        <p className="font-semibold">&copy; {currentYear} Espectro Político</p>
-                        <p>Feito com tecnologia IA by AI Studio.</p>
+                        <p className="font-semibold">&copy; {currentYear} Bússola Política</p>
+                        <p>by LancStudio.</p>
                     </section>
                 </div>
 
