@@ -53,7 +53,7 @@ const PixModal: React.FC<PixModalProps> = ({ onClose }) => {
                     {/* QR Code PIX */}
                     <div className="flex flex-col items-center">
                         <div className="bg-white p-2 rounded-lg shadow-inner mb-3">
-                            <img src="/qr-code.png" alt="PIX QR Code" className="w-40 h-40" />
+                            <img src="https://renatorgomes.com/backup/quiz/bussola/qr-code.png" alt="PIX QR Code" className="w-40 h-40" />
                         </div>
                         
                         <div className="bg-slate-900/50 p-3 rounded-lg text-left w-full border border-slate-700">
@@ -78,8 +78,8 @@ const PixModal: React.FC<PixModalProps> = ({ onClose }) => {
                 </div>
 
                 <p className="text-[10px] text-slate-500 mt-6 italic leading-relaxed">
-                    "O Leãozinho existe para ajudar a Luinha a pensar e organizar suas ideias."<br/>
-                    Sua contribuição ajuda a manter este projeto independente.
+                    A Bússola Política é um projeto independente focado em análise ideológica.<br/>
+                    Sua contribuição ajuda a manter a ferramenta gratuita e atualizada.
                 </p>
             </div>
         </div>
