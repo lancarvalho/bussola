@@ -7,7 +7,7 @@
     <title>Bússola Política | Descubra seu Espectro</title>
 
     <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -15,8 +15,8 @@
     <meta name="theme-color" content="#0f172a" />
     
     <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="apple-touch-icon" href="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="apple-touch-icon" href="logo.svg" />
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="Faça o teste da Bússola Política e descubra onde você se encaixa no espectro ideológico brasileiro. Quiz interativo sobre economia, sociedade e política." />
@@ -28,10 +28,8 @@
     <meta property="og:url" content="https://bussola-politica.app/" />
     <meta property="og:title" content="Bússola Política - Descubra seu lado" />
     <meta property="og:description" content="Onde você realmente está no espectro político brasileiro? Faça o teste agora." />
-    <meta property="og:image" content="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1024" />
-    <meta property="og:image:height" content="1024" />
+    <meta property="og:image" content="logo.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -39,7 +37,7 @@
     <meta name="twitter:creator" content="@pautaja" />
     <meta name="twitter:title" content="Bússola Política" />
     <meta name="twitter:description" content="Onde você realmente está no espectro político brasileiro? Faça o teste agora." />
-    <meta name="twitter:image" content="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
+    <meta name="twitter:image" content="logo.svg" />
 
     <script src="https://cdn.tailwindcss.com"></script>
 <script type="importmap">
@@ -54,11 +52,12 @@
 </head>
 <body class="bg-slate-900 text-slate-300 selection:bg-cyan-500 selection:text-white">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="index.tsx"></script>
     <script>
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            // Registro simplificado usando caminho relativo direto para sw.js
+            navigator.serviceWorker.register('sw.js')
               .then(registration => {
                 console.log('SW registrado com sucesso:', registration.scope);
               })

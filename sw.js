@@ -1,12 +1,12 @@
 
-const CACHE_NAME = 'politica-quiz-v1';
+const CACHE_NAME = 'politica-quiz-v3';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/logo.svg'
+  './',
+  'index.html',
+  'logo.svg',
+  'manifest.json'
 ];
 
-// Instalação: Cacheia o básico para offline
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -16,7 +16,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Ativação: Limpa caches antigos
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -32,26 +31,30 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Interceptação de Fetch: Requisito obrigatório para PWA instalável
-// Implementa estratégia Network-First com fallback para cache
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Se a resposta for válida, clonamos e guardamos no cache
-        if (response && response.status === 200 && response.type === 'basic') {
+    caches.match(event.request)
+      .then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then((response) => {
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
-        }
-        return response;
+          return response;
+        });
       })
       .catch(() => {
-        // Se falhar a rede, tenta o cache
-        return caches.match(event.request);
+        if (event.request.mode === 'navigate') {
+          return caches.match('index.html');
+        }
       })
   );
 });
