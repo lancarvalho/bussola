@@ -1,52 +1,59 @@
 
-const CACHE_NAME = 'bussola-politica-cache-v3';
+const CACHE_NAME = 'bussola-politica-cache-v4';
 // Arquivos iniciais para o cache do app shell
 const urlsToCache = [
   '/',
   '/index.html',
   '/logo.svg',
-  '/logo.png', // Importante para compartilhar mesmo offline se possível
-  '/qr-code.png',
-  '/manifest.json',
+  'https://www.renatorgomes.com/backup/quiz/bussola/logo.png',
+  'https://renatorgomes.com/backup/quiz/bussola/qr-code.png',
+  '/manifest.json'
 ];
 
 // Instala o service worker e armazena o app shell em cache
 self.addEventListener('install', event => {
-  // Força o SW a se tornar ativo imediatamente após a instalação
   self.skipWaiting();
-  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Cache aberto');
+        console.log('PWA: Cache de shell instalado');
         return cache.addAll(urlsToCache);
       })
   );
 });
 
-// Serve o conteúdo do cache quando estiver offline
+// Serve o conteúdo do cache quando estiver offline (Network-first para index, Cache-first para assets)
 self.addEventListener('fetch', event => {
+  // Evitar interceptar requisições que não sejam GET ou sejam de analytics
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    // Tenta pegar do cache primeiro
     caches.match(event.request)
       .then(response => {
-        // Se não estiver no cache, busca na rede
+        // Retorna o cache se encontrar, senão busca na rede
         return response || fetch(event.request).then(fetchResponse => {
-          // Se for uma requisição válida para a CDN ou para nossos assets, armazena em cache
-          const shouldCache =
-            event.request.url.startsWith('https://') ||
-            event.request.url.includes('.tsx') ||
-            event.request.url.includes('.ts');
+          // Só cacheia se for uma resposta válida de um asset do nosso domínio ou CDNs seguras
+          const url = event.request.url;
+          const isAsset = url.includes('.tsx') || 
+                          url.includes('.ts') || 
+                          url.includes('.js') || 
+                          url.includes('.svg') || 
+                          url.includes('.png') ||
+                          url.includes('aistudiocdn.com');
 
-          if (shouldCache && fetchResponse.status === 200) {
+          if (isAsset && fetchResponse.status === 200) {
             const responseToCache = fetchResponse.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, responseToCache);
+            });
           }
           return fetchResponse;
         });
+      }).catch(() => {
+        // Fallback offline para a página principal
+        if (event.request.mode === 'navigate') {
+          return caches.match('/');
+        }
       })
   );
 });
@@ -56,7 +63,6 @@ self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     Promise.all([
-      // Reivindica o controle de todas as abas abertas imediatamente
       self.clients.claim(),
       caches.keys().then(cacheNames => {
         return Promise.all(
