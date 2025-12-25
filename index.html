@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bússola Política | Descubra seu Espectro</title>
 
-    <!-- PWA Meta Tags & Favicons -->
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Política Quiz" />
     <meta name="theme-color" content="#0f172a" />
     
-    <!-- Usando SVG como favicon moderno (Navegadores e PWA preferem SVG) -->
+    <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="apple-touch-icon" href="/logo.svg" />
+    <link rel="apple-touch-icon" href="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="Faça o teste da Bússola Política e descubra onde você se encaixa no espectro ideológico brasileiro. Quiz interativo sobre economia, sociedade e política." />
@@ -19,7 +24,6 @@
     <meta name="author" content="Espectro Político" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
-    <!-- Redes sociais EXIGEM PNG/JPG. Usando URL absoluta hospedada para garantir preview. -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://bussola-politica.app/" />
     <meta property="og:title" content="Bússola Política - Descubra seu lado" />
@@ -33,7 +37,6 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@pautaja" />
     <meta name="twitter:creator" content="@pautaja" />
-    <meta property="twitter:url" content="/" />
     <meta name="twitter:title" content="Bússola Política" />
     <meta name="twitter:description" content="Onde você realmente está no espectro político brasileiro? Faça o teste agora." />
     <meta name="twitter:image" content="https://www.renatorgomes.com/backup/quiz/bussola/logo.png" />
@@ -55,11 +58,13 @@
     <script>
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').then(registration => {
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, err => {
-              console.log('ServiceWorker registration failed: ', err);
-            });
+            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+              .then(registration => {
+                console.log('SW registrado com sucesso:', registration.scope);
+              })
+              .catch(err => {
+                console.log('Falha ao registrar SW:', err);
+              });
           });
         }
     </script>

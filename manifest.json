@@ -2,38 +2,37 @@
 {
   "name": "Bússola Política",
   "short_name": "Política Quiz",
-  "id": "/",
-  "description": "Descubra sua posição no espectro político brasileiro com este quiz interativo e moderno.",
-  "categories": ["education", "politics", "social"],
+  "description": "Descubra sua posição no espectro político brasileiro.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
-  "lang": "pt-BR",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "https://www.renatorgomes.com/backup/quiz/bussola/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://www.renatorgomes.com/backup/quiz/bussola/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any"
     },
     {
       "src": "https://www.renatorgomes.com/backup/quiz/bussola/logo.png",
       "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     },
     {
-      "src": "https://www.renatorgomes.com/backup/quiz/bussola/logo.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "https://www.renatorgomes.com/backup/quiz/bussola/logo.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
-  ],
-  "screenshots": []
+  ]
 }

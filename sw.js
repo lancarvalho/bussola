@@ -1,78 +1,57 @@
 
-const CACHE_NAME = 'bussola-politica-cache-v4';
-// Arquivos iniciais para o cache do app shell
-const urlsToCache = [
+const CACHE_NAME = 'politica-quiz-v1';
+const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/logo.svg',
-  'https://www.renatorgomes.com/backup/quiz/bussola/logo.png',
-  'https://renatorgomes.com/backup/quiz/bussola/qr-code.png',
-  '/manifest.json'
+  '/logo.svg'
 ];
 
-// Instala o service worker e armazena o app shell em cache
-self.addEventListener('install', event => {
-  self.skipWaiting();
+// Instalação: Cacheia o básico para offline
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('PWA: Cache de shell instalado');
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
+  self.skipWaiting();
 });
 
-// Serve o conteúdo do cache quando estiver offline (Network-first para index, Cache-first para assets)
-self.addEventListener('fetch', event => {
-  // Evitar interceptar requisições que não sejam GET ou sejam de analytics
+// Ativação: Limpa caches antigos
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+// Interceptação de Fetch: Requisito obrigatório para PWA instalável
+// Implementa estratégia Network-First com fallback para cache
+self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Retorna o cache se encontrar, senão busca na rede
-        return response || fetch(event.request).then(fetchResponse => {
-          // Só cacheia se for uma resposta válida de um asset do nosso domínio ou CDNs seguras
-          const url = event.request.url;
-          const isAsset = url.includes('.tsx') || 
-                          url.includes('.ts') || 
-                          url.includes('.js') || 
-                          url.includes('.svg') || 
-                          url.includes('.png') ||
-                          url.includes('aistudiocdn.com');
-
-          if (isAsset && fetchResponse.status === 200) {
-            const responseToCache = fetchResponse.clone();
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          }
-          return fetchResponse;
-        });
-      }).catch(() => {
-        // Fallback offline para a página principal
-        if (event.request.mode === 'navigate') {
-          return caches.match('/');
+    fetch(event.request)
+      .then((response) => {
+        // Se a resposta for válida, clonamos e guardamos no cache
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
         }
+        return response;
       })
-  );
-});
-
-// Limpa caches antigos e assume controle imediatamente
-self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    Promise.all([
-      self.clients.claim(),
-      caches.keys().then(cacheNames => {
-        return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName);
-            }
-          })
-        );
+      .catch(() => {
+        // Se falhar a rede, tenta o cache
+        return caches.match(event.request);
       })
-    ])
   );
 });
